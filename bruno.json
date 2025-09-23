@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "getStatusVercel",
+  "name": "api16",
   "type": "collection",
   "ignore": [
     "node_modules",

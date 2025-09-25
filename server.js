@@ -1,9 +1,9 @@
 // ######
 // Local onde os pacotes de dependências serão importados
 // ######
-import express from "express"; // Requisição do pacote do express
-import pkg from "pg"; // Requisição do pacote do pg (PostgreSQL)
-import dotenv from "dotenv"; // Importa o pacote dotenv para carregar variáveis de ambiente
+import express from "express"; // Importa o pacote express
+import pkg from "pg"; // Importa o pacote do pg (PostgreSQL)
+import dotenv from "dotenv"; // Importa o pacote dotenv para variáveis de ambiente
 
 // ######
 // Local onde as configurações do servidor serão feitas
@@ -11,11 +11,18 @@ import dotenv from "dotenv"; // Importa o pacote dotenv para carregar variáveis
 const app = express(); // Inicializa o servidor Express
 const port = 3000; // Define a porta onde o servidor irá escutar
 dotenv.config(); // Carrega as variáveis de ambiente do arquivo .env
-const { Pool } = pkg; // Obtém o construtor Pool do pacote pg para gerenciar conexões com o banco de dados PostgreSQL
+const { Pool } = pkg; // Obtém a classe Pool do pacote pg
+
 let pool = null; // Variável para armazenar o pool de conexões com o banco de dados
 
-// Função para obter uma conexão com o banco de dados.
-// Se o pool de conexões ainda não existe, ele é criado. Caso contrário, retorna o pool existente.
+// Adiciona um middleware para processar corpos de requisições em JSON
+app.use(express.json());
+
+/**
+ * Função para obter uma conexão com o banco de dados.
+ * Cria o pool de conexões na primeira chamada e o reutiliza nas seguintes.
+ * @returns {Pool} O pool de conexões com o banco de dados.
+ */
 function conectarBD() {
   if (!pool) {
     pool = new Pool({
@@ -30,48 +37,41 @@ function conectarBD() {
 // ######
 
 app.get("/", async (req, res) => {
-  // Rota raiz do servidor
-  // Rota GET /
-  // Esta rota é chamada quando o usuário acessa a raiz do servidor
-  // Ela retorna uma mensagem de boas-vindas e o status da conexão com o banco de dados
-  // Cria a rota da raiz do projeto
+  // Rota GET para a raiz do servidor.
+  // Retorna uma mensagem de boas-vindas e o status da conexão com o banco de dados.
+  console.log("Rota GET / solicitada");
 
-  console.log("Rota GET / solicitada"); // Log no terminal para indicar que a rota foi acessada
-
-  const db = conectarBD(); // Atribui a db o pool de conexões
+  const db = conectarBD();
 
   let dbStatus = "ok";
-
-  // Tenta executar uma consulta simples para verificar a conexão com o banco de dados
-  // Se a consulta falhar, captura o erro e define o status do banco de dados como a mensagem de erro
   try {
     await db.query("SELECT 1");
   } catch (e) {
     dbStatus = e.message;
   }
 
-  // Responde com um JSON contendo uma mensagem, o nome do autor e o status da conexão com o banco de dados
   res.json({
-    message: "API para _____", // Substitua pelo conteúdo da sua API
-    author: "Fernanda Barbosa Rodrigues", // Substitua pelo seu nome
+    message: "Bem-vindo à API de Questões!",
+    author: "Fernanda Barbosa Rodrigues",
     statusBD: dbStatus,
   });
 });
 
 app.get("/questoes", async (req, res) => {
-  console.log("Rota GET /questoes solicitada"); // Log no terminal para indicar que a rota foi acessada
+  // Rota GET para buscar todas as questões.
+  console.log("Rota GET /questoes solicitada");
 
-  const db = conectarBD(); // Atribui a db o pool de conexões
+  const db = conectarBD();
 
   try {
-    const resultado = await db.query("SELECT * FROM questoes"); // Executa uma consulta SQL para selecionar todas as questões
-    const dados = resultado.rows; // Obtém as linhas retornadas pela consulta
-    res.json(dados); // Retorna o resultado da consulta como JSON
+    const resultado = await db.query("SELECT * FROM questoes");
+    const dados = resultado.rows;
+    res.json(dados);
   } catch (e) {
-    console.error("Erro ao buscar questões:", e); // Log do erro no servidor
+    console.error("Erro ao buscar questões:", e);
     res.status(500).json({
       erro: "Erro interno do servidor",
-      mensagem: "Não foi possível buscar as questões",
+      mensagem: "Não foi possível buscar as questões.",
     });
   }
 });
@@ -80,7 +80,6 @@ app.get("/questoes", async (req, res) => {
 // Local onde o servidor irá escutar as requisições
 // ######
 app.listen(port, () => {
-  // Inicia o servidor na porta definida
-  // Um socket para "escutar" as requisições
+  // Inicia o servidor na porta definida.
   console.log(`Serviço rodando na porta: ${port}`);
 });

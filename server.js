@@ -27,7 +27,7 @@ try {
 
   res.json({
     message: "API para _____",      // Substitua pelo conteúdo da sua API
-    author: "Gilzilene Orneles de Sales",    // Substitua pelo seu nome
+    author: "Fernanda Barbosa Rodrigues",    // Substitua pelo seu nome
     statusBD: dbStatus   // Acrescente esta linha
 })
   });

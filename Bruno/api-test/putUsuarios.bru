@@ -1,0 +1,29 @@
+meta {
+  name: putUsuarios
+  type: http
+  seq: 11
+}
+
+put {
+  url: https://cold-mausoleum-jj96g5q664wj25jwr-3000.app.github.dev/questoes/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 5
+}
+
+body:json {
+  {
+    "enunciado": "Qual é a capital da Bélgica?",
+    "disciplina": "Geografia",
+    "tema": "Capitais do mundo",
+    "nivel": 3
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

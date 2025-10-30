@@ -1,0 +1,20 @@
+meta {
+  name: deleteUsuarios
+  type: http
+  seq: 10
+}
+
+delete {
+  url: https://cold-mausoleum-jj96g5q664wj25jwr-3000.app.github.dev/questoes/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 3
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,25 @@
+meta {
+  name: postUsuarios
+  type: http
+  seq: 12
+}
+
+post {
+  url: https://cold-mausoleum-jj96g5q664wj25jwr-3000.app.github.dev/questoes/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "enunciado": "Qual é a capital da França?",
+    "disciplina": "Geografia",
+    "tema": "Capitais do mundo",
+    "nivel": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
